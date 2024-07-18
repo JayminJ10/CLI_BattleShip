@@ -1,4 +1,4 @@
-#BattleShip on CLI with multiplayer support!
+# BattleShip on CLI with multiplayer support!
 
-##Usage:
-###COMING SOON
+### Usage:
+#### COMING SOON
