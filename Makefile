@@ -1,12 +1,23 @@
 CC=gcc
-OBJ=BattleShip
-SRC=BS.c
+TARG=BattleShip
+OBJDIR=obj
+objs=obj/*.o
 
-all: BS
+all: init $(TARG)
 
-BS:
-	$(CC) -o $(OBJ) $(SRC)
-debug:
-	$(CC) -o $(OBJ) $(SRC) -g
+init:
+	mkdir -p obj
+
+$(TARG): BSUtils.o BS.o
+	$(CC) -o $(TARG) $(objs)
+
+BSUtils.o: src/BSUtils.c
+	gcc -c src/BSUtils.c -o obj/BSUtils.o
+
+BS.o: src/BS.c
+	gcc -c src/BS.c -o obj/BS.o
+
+# debug:
+# 	$(CC) -o $(TARG) $(SRC) -g
 clean:
-	rm BattleShip
+	rm $(TARG) $(objs)
