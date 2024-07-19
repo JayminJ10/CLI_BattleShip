@@ -6,3 +6,5 @@ typedef struct tile {
 	uint hit;
 	char *color;
 } Tile;
+
+typedef unsigned int uint;

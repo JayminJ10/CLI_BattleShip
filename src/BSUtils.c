@@ -107,7 +107,7 @@ void print_board(Tile **brd) {
 	printf("\n");
 }
 
-char *get_input(char *msg) {
+char *get_input_pt_choice(char *msg) {
 	char buff[128];
 	char *choice;
 
@@ -151,4 +151,14 @@ int verify_choice(char *inp) {
 	}
 
 	return 1;
+}
+
+char *get_input() {
+	char buf[128];
+	char *choice;
+	choice = (char*)malloc(sizeof(char) * 128);
+	fgets(buf, 128, stdin);
+	sscanf(buf, "%s", choice);
+
+	return choice;
 }
