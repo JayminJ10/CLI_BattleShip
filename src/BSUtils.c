@@ -112,7 +112,7 @@ char *get_input_pt_choice(char *msg) {
 	char *choice;
 
 	char *format_error = "Invalid choice. Please input a letter followed by a number.\nEx: A0";
-	char *choice_error = "Invalid choice. Only letters [A-J OR a-j] and numbers [0-9] are allowed.";
+	char *choice_error = "Invalid choice. Only letters [A-J] and numbers [0-9] are allowed.";
 
 	printf("%s", msg);
 	fgets(buff, 128, stdin);
@@ -146,7 +146,7 @@ int verify_choice(char *inp) {
 	int num = 0;
 	if(!isalpha(inp[0]) || !isdigit(inp[1])) return -1;
 	sscanf(inp, "%c%i", &letter, &num);
-	if(letter < 'A' || (letter > 'J' && letter < 'a') || letter > 'j') {
+	if(letter < 'A' || (letter > 'J')) {
 		return -2;
 	}
 

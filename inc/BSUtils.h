@@ -1,15 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <ctype.h>
 #include <time.h>
-#include "BSVars.h"
-
-//Net related
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <netdb.h>
+#include "BSTypes.h"
 
 #define BOARD_SIZE  10
 #define UNIT_SIZE   1
@@ -32,16 +27,8 @@ char *get_input_pt_choice(char *msg);
 char *get_input();
 int verify_choice(char *inp);
 void print_board(Tile **brd);
-void game_loop();
+void game_loop(Tile **board);
 void game_over();
 void clear_board(Tile **board);
 void randomize_board(Tile **board, int boats[], int len);
 Tile **make_board();
-
-//Net related
-void *server(void *unused);
-void *client(int port);
-// void *c_send(void *args);
-// void *c_rec(void *args);
-// void *s_send(void *args);
-// void *s_rec(void *args);
