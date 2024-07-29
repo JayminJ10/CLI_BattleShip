@@ -2,7 +2,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <pthread.h>
-#include "../inc/BSUtils.h"
+#include "BSUtils.h"
 
 #define NUMTHREADS 100
 

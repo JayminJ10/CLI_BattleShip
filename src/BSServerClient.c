@@ -270,7 +270,7 @@ void update_board(Tile **board, Tile data, u8 hit, int type) {
         printf("Received ");
         if (hit) {
             printf("Hit\n");
-            if(updating->color == RED || updating->color == GREY) {
+            if(!strncmp(updating->color, "RED", 3) || !strncmp(updating->color, "GREY", 4)) {
                 remove_tile(updating);
             }
             else {
