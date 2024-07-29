@@ -20,7 +20,7 @@ void clear_board(Tile **board) {
 }
 
 void randomize_board(Tile **board, int boats[], int len) {
-	uint horizontal = 0;
+	u32 horizontal = 0;
 	horizontal ^= rand() % 2;
 	int rand1, rand2 = 0;
 	for(int i=0; i<len; i++) {
