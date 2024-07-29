@@ -2,6 +2,7 @@ CC=gcc
 TARG=BattleShip
 OFILES=obj/*.o
 objs=BSUtils.o BSServerClient.o BS.o
+FLAGS=-std=c99 -Wall
 
 all: init BS
 
@@ -9,7 +10,7 @@ init:
 	mkdir -p obj
 
 BS: $(objs)
-	$(CC) -o $(TARG) $(OFILES)
+	$(CC) -o $(TARG) $(OFILES) $(FLAGS)
 
 debug: init $(objs)
 	$(CC) -o $(TARG) $(OFILES) -g
