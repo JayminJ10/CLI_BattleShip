@@ -104,7 +104,7 @@ void server_game_loop(Tile **board) {
         switch(received_packet.type) {
             case PACKET_COORDINATE:
                 // Update board first
-                u8 hit = 0;
+                unsigned short hit = 0;
                 u8 x = received_packet.packet.data.indi;
                 u8 y = received_packet.packet.data.indj;
                 if (board[x][y].sym == '#') {
@@ -149,8 +149,7 @@ void client_game_loop(int port, Tile **board) {
         switch(received_packet.type) {
             case PACKET_COORDINATE:
                 // Update board first
-                u8 hit;
-                hit = (unsigned short) 0;
+                u8 hit = 0;
                 u8 x = received_packet.packet.data.indi;
                 u8 y = received_packet.packet.data.indj;
                 if (board[x][y].sym == '#') {
