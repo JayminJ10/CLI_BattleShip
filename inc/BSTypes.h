@@ -17,10 +17,14 @@ typedef struct player {
 } Player;
 
 typedef struct packet {
-	//u8 type;
+	u8 type;
 
 	//u32 size;
 
-	u8 i;
-	u8 j;
+	u8 hit;
+
+	union {
+		// One tile's information
+		Tile data;
+	} packet;
 } packet_t;

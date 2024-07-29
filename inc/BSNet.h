@@ -6,12 +6,18 @@
 
 #define NUMTHREADS 100
 
+#define SENT                0
+#define RECEIVED            1
+
+#define PACKET_PING         1
+#define PACKET_COORDINATE   2
+#define PACKET_HIT          3
+#define PACKET_QUIT         4
+
 //Net related functions
 int make_server();
 void *server(void *unused);
 void server_game_loop(Tile **board);
-// void *server_listen(void *unused);
-// void *server_bind(void *thread_id);
 void *client(int port);
 void client_game_loop(int port, Tile **board);
-// void *client_handler(void *thread_id);
+void close_socks();

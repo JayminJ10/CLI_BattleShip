@@ -46,6 +46,13 @@ void randomize_board(Tile **board, int boats[], int len) {
 				else curr = &board[rand1-j][rand2];
 				// Check if up or down limit intersects existing boat.
 			}
+
+			// If boat piece exists on this spot
+			if (curr->sym == '#') {
+				clear_board(board);
+				randomize_board(board, boats, len);
+				return;
+			}
 			
 			switch(boats[i]) {
 				case 2:
@@ -81,6 +88,18 @@ void randomize_board(Tile **board, int boats[], int len) {
 		}
 		horizontal ^= 1;
 	}
+}
+
+
+void remove_tile(Tile *t) {
+	t->id = 0;
+	t->sym = '*';
+}
+
+void clear_tile(Tile *t) {
+	t->id = 0;
+	t->sym = '*';
+	t->color = NORM;
 }
 
 void print_board(Tile **brd) {
@@ -119,6 +138,10 @@ char *get_input_pt_choice(char *msg) {
 	choice = (char*)malloc(sizeof(char) * 128);
 	strcpy(choice, buff);
 	printf("\n");
+
+	if (!strncmp(choice, "quit", 4)) {
+		return choice;
+	}
 
 	int ver = verify_choice(choice);
 	while(ver != 1) {
