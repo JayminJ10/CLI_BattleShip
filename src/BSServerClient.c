@@ -103,6 +103,7 @@ void server_game_loop(Tile **board) {
 
         switch(received_packet.type) {
             case PACKET_COORDINATE:
+            {
                 // Update board first
                 unsigned short hit = 0;
                 u8 x = received_packet.packet.data.indi;
@@ -114,13 +115,18 @@ void server_game_loop(Tile **board) {
                 send(csock, &check, sizeof(check), 0);
                 update_board(board, received_packet.packet.data, hit, RECEIVED);
                 break;
+            }
             case PACKET_QUIT:
+            {
                 close(csock);
                 close(ssock);
                 return;
+            }
             default:
+            {
                 printf("Unrecognized packet type!\n");
                 exit(1);
+            }
         }
 	}
 	return;
@@ -148,6 +154,7 @@ void client_game_loop(int port, Tile **board) {
 
         switch(received_packet.type) {
             case PACKET_COORDINATE:
+            {
                 // Update board first
                 u8 hit = 0;
                 u8 x = received_packet.packet.data.indi;
@@ -159,12 +166,17 @@ void client_game_loop(int port, Tile **board) {
                 send(conn, &check, sizeof(check), 0);
                 update_board(board, received_packet.packet.data, hit, RECEIVED);
                 break;
+            }
             case PACKET_QUIT:
+            {
                 close(conn);
                 return;
+            }
             default:
+            {
                 printf("Unrecognized packet type!\n");
                 exit(1);
+            }
         }
 
         printf("YOUR MOVE\n");
