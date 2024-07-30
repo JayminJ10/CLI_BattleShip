@@ -134,7 +134,10 @@ void server_game_loop(Tile **board) {
 
 void client_game_loop(int port, Tile **board) {
     int lose = 0;
-    client(port);
+    if (client(port) == empty) {
+        printf("Could not connect!\n");
+        exit(1);
+    }
     // Print board
     printf("PLAYER:\n");
     print_board(board);
