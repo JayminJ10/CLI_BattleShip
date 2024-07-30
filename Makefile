@@ -16,13 +16,13 @@ debug: init $(objs)
 	$(CC) -o $(TARG) $(OFILES) -g
 
 BSUtils.o: src/BSUtils.c
-	gcc -c src/BSUtils.c -o obj/BSUtils.o
+	gcc -c src/BSUtils.c -o obj/BSUtils.o -lstdc++
 
 BS.o: src/BS.c
-	gcc -c src/BS.c -o obj/BS.o
+	gcc -c src/BS.c -o obj/BS.o -lstdc++
 
 BSServerClient.o: src/BSServerClient.c
-	gcc -c src/BSServerClient.c -o obj/BSServerClient.o
+	gcc -c src/BSServerClient.c -o obj/BSServerClient.o -lstdc++
 
 clean:
 	rm -f -- $(TARG) $(OFILES)
