@@ -11,7 +11,7 @@ void *server(void *unused) {
     // bind to open port
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr("0.0.0.0");
+    addr.sin_addr.s_addr = INADDR_ANY;
 
     if (bind(ssock, (struct sockaddr*) &addr, sizeof(addr))) {
         perror("bind error:");
