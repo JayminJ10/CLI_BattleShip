@@ -1,6 +1,7 @@
 #include "../inc/BSNet.h"
 
 void *empty = NULL;
+void *ret = (void*)1;
 int ssock, csock, conn;
 
 void *server(void *unused) {
@@ -10,7 +11,7 @@ void *server(void *unused) {
     // bind to open port
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = INADDR_ANY;
+    addr.sin_addr.s_addr = inet_addr("0.0.0.0");
 
     if (bind(ssock, (struct sockaddr*) &addr, sizeof(addr))) {
         perror("bind error:");
@@ -52,6 +53,8 @@ void *client(int port) {
         perror("connect error:");
         return empty;
     }
+
+    return ret;
 
 //TODO: do threads
 }
