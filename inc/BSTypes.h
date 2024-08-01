@@ -13,7 +13,7 @@ typedef struct tile {
 
 typedef struct player {
 	Tile **board;
-	u8 boats;
+	int boat_count;
 } Player;
 
 typedef struct packet {

@@ -3,6 +3,8 @@
 
 Tile **p1board;
 Tile **p2board;
+Player *P1;
+Player *P2;
 
 int blist[5] = {2, 3, 3, 4, 5};
 

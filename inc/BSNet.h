@@ -12,7 +12,8 @@
 #define PACKET_PING         1
 #define PACKET_COORDINATE   2
 #define PACKET_HIT          3
-#define PACKET_QUIT         4
+#define PACKET_GAMEOVER     4
+#define PACKET_QUIT         5
 
 //Net related functions
 int make_server();

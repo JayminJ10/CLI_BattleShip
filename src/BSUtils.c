@@ -90,7 +90,6 @@ void randomize_board(Tile **board, int boats[], int len) {
 	}
 }
 
-
 void remove_tile(Tile *t) {
 	t->id = 0;
 	t->sym = '*';

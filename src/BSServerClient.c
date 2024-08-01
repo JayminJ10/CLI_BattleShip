@@ -62,6 +62,7 @@ void *client(int port) {
 
 void server_game_loop(Tile **board) {
 	int lose = 0;
+    int boats_left = 17;
     server(NULL);
 	while (!lose) {
 		// Print board
@@ -86,7 +87,6 @@ void server_game_loop(Tile **board) {
         }
 		sscanf(choice, "%c %hu", &letter, &number);
         letter_val = letter - 65;
-        printf("%hu %hu\n", letter_val, number);
 
         // Send first:
         // Send our choice to the client and await a hit response to update our board before continuing.
@@ -96,8 +96,18 @@ void server_game_loop(Tile **board) {
         recv(csock, &checked, sizeof(checked), 0);
         switch(checked.type) {
             case PACKET_HIT:
+            {
                 printf("checking hit\n");
                 update_board(board, move.packet.data, checked.hit, SENT);
+                break;
+            }
+            case PACKET_GAMEOVER:
+            {
+                printf("You Win!\n");
+                close(csock);
+                close(ssock);
+                exit(1);
+            }
         }
 
         printf("WAITING FOR P2\n");
@@ -116,6 +126,17 @@ void server_game_loop(Tile **board) {
                     hit = 1;
                 }
                 packet_t check = {.type = PACKET_HIT, .hit = hit};
+                if (check.hit == 1) {
+                    boats_left -= 1;
+                    if (boats_left == 0) {
+                        packet_t gameover = {.type = PACKET_GAMEOVER};
+                        send(csock, &gameover, sizeof(gameover), 0);
+                        printf("Game Over: P2 Wins!\n");
+                        close(csock);
+                        close(ssock);
+                        exit(1);
+                    }
+                }
                 send(csock, &check, sizeof(check), 0);
                 update_board(board, received_packet.packet.data, hit, RECEIVED);
                 break;
@@ -138,6 +159,7 @@ void server_game_loop(Tile **board) {
 
 void client_game_loop(int port, Tile **board) {
     int lose = 0;
+    int boats_left = 17;
     if (client(port) == empty) {
         printf("Could not connect!\n");
         exit(1);
@@ -170,6 +192,16 @@ void client_game_loop(int port, Tile **board) {
                     hit = 1;
                 }
                 packet_t check = {.type = PACKET_HIT, .hit = hit};
+                if (check.hit == 1) {
+                    boats_left -= 1;
+                    if (boats_left == 0) {
+                        packet_t gameover = {.type = PACKET_GAMEOVER};
+                        send(conn, &gameover, sizeof(gameover), 0);
+                        printf("Game Over: P1 Wins!\n");
+                        close(conn);
+                        exit(1);
+                    }
+                }
                 send(conn, &check, sizeof(check), 0);
                 update_board(board, received_packet.packet.data, hit, RECEIVED);
                 break;
@@ -197,7 +229,6 @@ void client_game_loop(int port, Tile **board) {
         }
 		sscanf(choice, "%c %hu", &letter, &number);
         letter_val = letter - 65;
-        printf("%hu %hu\n", letter_val, number);
 
         // Send our choice to the server and await a hit response to update our board before continuing.
         packet_t move = {.type = PACKET_COORDINATE, .packet.data = board[/*htons*/(number)][/*htons*/(letter_val)]};
@@ -206,47 +237,18 @@ void client_game_loop(int port, Tile **board) {
         recv(conn, &checked, sizeof(checked), 0);
         switch(checked.type) {
             case PACKET_HIT:
+            {
                 printf("checking hit\n");
                 update_board(board, move.packet.data, checked.hit, SENT);
+                break;
+            }
+            case PACKET_GAMEOVER:
+            {
+                printf("You Win!\n");
+                close(conn);
+                exit(1);
+            }
         }
-
-        // switch(received_packet.type) {
-        //     case PACKET_COORDINATE:
-        //         // Update board first
-        //         u8 hit = 0;
-        //         u8 x = received_packet.packet.data.indi;
-        //         u8 y = received_packet.packet.data.indj;
-        //         if (board[x][y].sym == '#') {
-        //             hit = 1;
-        //         }
-        //         packet_t check = {.type = PACKET_HIT, .hit = hit};
-        //         send(conn, &check, sizeof(check), 0);
-        //         update_board(board, received_packet.packet.data, hit, RECEIVED);
-        //         // Get input
-        //         char letter; 
-        //         u8 letter_val = 0;
-        //         u8 number = 0;
-        //         char *choice = get_input_pt_choice("Enter your choice: ");
-        //         if (!strncmp(choice, "quit", 4)) {
-        //             packet_t quit_packet = {.type = PACKET_QUIT};
-        //             send(conn, &quit_packet, sizeof(quit_packet), 0);
-        //             break;
-        //         }
-        //         sscanf(choice, "%c %hu", &letter, &number);
-        //         letter_val = letter - 65;
-        //         printf("%hu %hu\n", letter_val, number);
-        //         Tile send = board[number][letter_val];
-        //         to_send.type = PACKET_COORDINATE;
-        //         to_send.packet.data = send;
-        //         break;
-            
-        //     default:
-        //         printf("Unrecognized packet type!\n");
-        //         exit(1);
-        // }
-        
-        // Send to server
-        // send(conn, &to_send, sizeof(to_send), 0);
 	}
 	return;
 }
@@ -260,9 +262,7 @@ void update_board(Tile **board, Tile data, u8 hit, int type) {
     printf("%d %d\n", x, y);
     
     if (type == SENT) {
-        printf("Sent\n");
         if (hit) {
-            printf("Hit\n");
             if (updating->sym == '#') {
                 updating->color = RED;
             }
@@ -273,7 +273,6 @@ void update_board(Tile **board, Tile data, u8 hit, int type) {
             }
         }
         else {
-            printf("No Hit\n");
             if (updating->sym == '#') {
                 updating->color = GREY;
             }
@@ -286,9 +285,7 @@ void update_board(Tile **board, Tile data, u8 hit, int type) {
     }
 
     if (type == RECEIVED) {
-        printf("Received ");
         if (hit) {
-            printf("Hit\n");
             if(!strncmp(updating->color, "RED", 3) || !strncmp(updating->color, "GREY", 4)) {
                 remove_tile(updating);
             }
@@ -297,7 +294,6 @@ void update_board(Tile **board, Tile data, u8 hit, int type) {
             }
         }
         else {
-            printf("No Hit\n");
             clear_tile(updating);
         }
     }
