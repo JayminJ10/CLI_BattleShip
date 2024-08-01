@@ -40,6 +40,7 @@ void *client(int port) {
     struct sockaddr_in addr = { 0 };
     addr.sin_family = AF_INET;
     addr.sin_port = htons((short) port);
+    addr.sin_addr.s_addr = INADDR_ANY;
 
     // connect to local machine at specified port
     char addrstr[NI_MAXHOST + NI_MAXSERV + 1];
