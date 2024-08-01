@@ -97,7 +97,6 @@ void server_game_loop(Tile **board) {
         switch(checked.type) {
             case PACKET_HIT:
             {
-                printf("checking hit\n");
                 update_board(board, move.packet.data, checked.hit, SENT);
                 break;
             }
@@ -238,7 +237,6 @@ void client_game_loop(int port, Tile **board) {
         switch(checked.type) {
             case PACKET_HIT:
             {
-                printf("checking hit\n");
                 update_board(board, move.packet.data, checked.hit, SENT);
                 break;
             }
@@ -258,8 +256,6 @@ void update_board(Tile **board, Tile data, u8 hit, int type) {
     x = data.indi, y = data.indj;
     Tile *updating = &board[x][y];
     // If there's a boat on our end
-
-    printf("%d %d\n", x, y);
     
     if (type == SENT) {
         if (hit) {
