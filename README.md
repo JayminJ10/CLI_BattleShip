@@ -1,8 +1,8 @@
 # BattleShip on CLI with multiplayer support!
-## (*Runs locally*)
+### (*Runs locally*)
 
-## Installation:
-#### Run 'make' or 'make all'
+### Installation:
+##### Run 'make' or 'make all'
 
 ### Usage:
 ##### Run exe and use 'h' for hosting or 'j' for joining an open port.
