@@ -9,5 +9,5 @@
 ![](Battleship_Host-Join.gif)
 
 ### How to play:
-##### This program follows a strict server-client send-receive order.
+##### This program follows a strict server-client send-receive order. Send coordinates and play as you would normally!
 ![](Battleship_Gameplay.gif)
