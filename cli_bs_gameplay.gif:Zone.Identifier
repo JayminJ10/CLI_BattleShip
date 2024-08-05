@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://cloudconvert.com/
+HostUrl=https://us-east.storage.cloudconvert.com/tasks/55a28ae5-12fc-42e7-a2bc-30faad55a64b/cli_bs_gameplay.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=cloudconvert-production%2F20240805%2Fva%2Fs3%2Faws4_request&X-Amz-Date=20240805T015718Z&X-Amz-Expires=86400&X-Amz-Signature=67c6d35d481370577012dc9ea98adcec8c5ce56255a8c9496925f1a59771caca&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22cli_bs_gameplay.gif%22&response-content-type=image%2Fgif&x-id=GetObject

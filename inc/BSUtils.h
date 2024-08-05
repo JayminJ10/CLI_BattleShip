@@ -8,9 +8,8 @@
 
 #define BOARD_SIZE  10
 #define UNIT_SIZE   1
-#define EASY_BOATS	5
-#define MED_BOATS	4
-#define HARD_BOATS	3
+#define NUM_BOATS	5
+#define BOAT_PCS    17
 
 // Colors for CLI output design
 #define NORM  		"\x1B[0m"
@@ -36,3 +35,4 @@ void remove_tile(Tile *t);
 void clear_tile(Tile *t);
 void randomize_board(Tile **board, int boats[], int len);
 Tile **make_board();
+void clear_screen();

@@ -5,10 +5,8 @@ void *ret = (void*)1;
 int ssock, csock, conn;
 
 void *server(void *unused) {
-    // create socket
     ssock = socket(PF_INET, SOCK_STREAM, 0);
 
-    // bind to open port
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = INADDR_ANY;
@@ -18,7 +16,6 @@ void *server(void *unused) {
         return empty;
     }
 
-    // read port
     socklen_t addr_len = sizeof(addr);
     getsockname(ssock, (struct sockaddr*) &addr, &addr_len);
     printf("server is on port %d\n", (int) ntohs(addr.sin_port));
@@ -62,7 +59,7 @@ void *client(int port) {
 
 void server_game_loop(Tile **board) {
 	int lose = 0;
-    int boats_left = 17;
+    int boats_left = BOAT_PCS;
     server(NULL);
 	while (!lose) {
 		// Print board
@@ -90,7 +87,7 @@ void server_game_loop(Tile **board) {
 
         // Send first:
         // Send our choice to the client and await a hit response to update our board before continuing.
-        packet_t move = {.type = PACKET_COORDINATE, .packet.data = board[/*htons*/(number)][/*htons*/(letter_val)]};
+        packet_t move = {.type = PACKET_COORDINATE, .packet.data = board[(number)][(letter_val)]};
         send(csock, &move, sizeof(move), 0);
         packet_t checked;
         recv(csock, &checked, sizeof(checked), 0);
@@ -158,7 +155,7 @@ void server_game_loop(Tile **board) {
 
 void client_game_loop(int port, Tile **board) {
     int lose = 0;
-    int boats_left = 17;
+    int boats_left = BOAT_PCS;
     if (client(port) == empty) {
         printf("Could not connect!\n");
         exit(1);
@@ -230,7 +227,7 @@ void client_game_loop(int port, Tile **board) {
         letter_val = letter - 65;
 
         // Send our choice to the server and await a hit response to update our board before continuing.
-        packet_t move = {.type = PACKET_COORDINATE, .packet.data = board[/*htons*/(number)][/*htons*/(letter_val)]};
+        packet_t move = {.type = PACKET_COORDINATE, .packet.data = board[(number)][(letter_val)]};
         send(conn, &move, sizeof(move), 0);
         packet_t checked;
         recv(conn, &checked, sizeof(checked), 0);
@@ -255,24 +252,28 @@ void update_board(Tile **board, Tile data, u8 hit, int type) {
     u8 x, y;
     x = data.indi, y = data.indj;
     Tile *updating = &board[x][y];
+
     // If there's a boat on our end
-    
     if (type == SENT) {
         if (hit) {
+            // Don't overwrite a boat piece with an X, just change the color to mimic a peg
             if (updating->sym == '#') {
                 updating->color = RED;
             }
             else {
+            // Otherwise place a red 'X' to mark a hit    
                 updating->sym = 'X';
                 updating->color = RED;
                 updating->hit = hit;
             }
         }
         else {
+            // Don't overwrite a boat piece
             if (updating->sym == '#') {
                 updating->color = GREY;
             }
             else {
+            // Otherwise place a white 'O' to mark a miss    
                 updating->sym = 'O';
                 updating->color = GREY;
                 updating->hit = hit;
@@ -282,22 +283,24 @@ void update_board(Tile **board, Tile data, u8 hit, int type) {
 
     if (type == RECEIVED) {
         if (hit) {
-            if(!strncmp(updating->color, "RED", 3) || !strncmp(updating->color, "GREY", 4)) {
-                remove_tile(updating);
+            // If we had a previous hit, don't remove the marker, just remove the boat piece and replace it with an 'X'
+            if(!strncmp(updating->color, "RED", 3)) {
+                updating->sym = 'X';
             }
+            // Or if the boat had a miss marked, just remove the boat piece and replace it with an 'O'
+            else if (!strncmp(updating->color, "GREY", 4)) {
+                updating->sym = 'O';
+            }
+            // Otherwise, remove the boat piece altogether
             else {
                 clear_tile(updating);
             }
         }
         else {
+            // This with a default piece is the same as "do nothing"
             clear_tile(updating);
         }
     }
+    // Print out the updated board
     print_board(board);
-}
-
-void close_socks() {
-    close(ssock);
-    close(csock);
-    close(conn);
 }

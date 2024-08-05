@@ -26,7 +26,7 @@ void main(int argc, char **argv) {
 	if(horj == 'h' || horj == 'H') {
 		p1board = make_board();
 		clear_board(p1board);
-		randomize_board(p1board, blist, EASY_BOATS);
+		randomize_board(p1board, blist, NUM_BOATS);
 
 		server_game_loop(p1board);
 	}
@@ -36,7 +36,7 @@ void main(int argc, char **argv) {
 
 		p2board = make_board();
 		clear_board(p2board);
-		randomize_board(p2board, blist, EASY_BOATS);
+		randomize_board(p2board, blist, NUM_BOATS);
 
 		client_game_loop(atoi(port), p2board);
 	}

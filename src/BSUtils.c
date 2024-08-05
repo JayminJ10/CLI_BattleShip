@@ -37,17 +37,17 @@ void randomize_board(Tile **board, int boats[], int len) {
 			Tile *curr = &board[rand1][rand2];
 			
 			if(horizontal) {
+				// Check horizontal bound
 				if(rand2+boats[i] < (BOARD_SIZE*UNIT_SIZE)-1) curr = &board[rand1][rand2+j];
 				else curr = &board[rand1][rand2-j];
-				// Check if left or right limit intersects existing boat.
 			}
 			else {
+				// Check vertical bound
 				if(rand1+boats[i] < BOARD_SIZE-1) curr = &board[rand1+j][rand2];
 				else curr = &board[rand1-j][rand2];
-				// Check if up or down limit intersects existing boat.
 			}
 
-			// If boat piece exists on this spot
+			// If boat piece exists on this spot -- NOTE: This is not a good solution but is okay for the time being
 			if (curr->sym == '#') {
 				clear_board(board);
 				randomize_board(board, boats, len);
